@@ -1,0 +1,6 @@
+---
+- name: Restart systemd-timesyncd 
+  when: not ansible_check_mode
+  ansible.builtin.systemd:
+    name: "{{ systemd_timesyncd_service_name }}"
+    state: restarted

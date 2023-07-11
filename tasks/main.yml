@@ -1,0 +1,27 @@
+---
+
+- name: Systemd-timesyncd tasks
+  tags:
+    - systemd_timesyncd_install
+    - systemd_timesyncd_config
+    - systemd_timesyncd_service
+    - systemd_timesyncd
+  block:
+    - name: Set osfamily dependency variables
+      ansible.builtin.include_vars: "{{ item }}"
+      loop:
+        - "{{ ansible_os_family }}/{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
+        - "{{ ansible_os_family }}.yml"
+    - name: Installation tasks
+      ansible.builtin.import_tasks: install.yml
+    - name: Configration tasks
+      ansible.builtin.import_tasks: config.yml
+    - name: Dropin configration tasks
+      ansible.builtin.import_tasks: dropin.yml
+    - name: Service tasks
+      ansible.builtin.import_tasks: service.yml
+  rescue:
+    - name: Print Error
+      ansible.builtin.debug:
+        msg: "Unsupport platform or error occurred due to some reason."
+      failed_when: true

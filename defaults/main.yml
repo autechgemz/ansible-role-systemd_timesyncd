@@ -1,0 +1,13 @@
+---
+
+systemd_timesyncd_debug: false
+
+systemd_timesyncd_package_ensure: 'present'
+
+systemd_timesyncd_service_ensure: 'started'
+
+systemd_timesyncd_service_enable: true
+
+systemd_timesyncd_config_options: {}
+
+systemd_timesyncd_dropin_config_options: {}

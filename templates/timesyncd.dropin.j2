@@ -1,0 +1,20 @@
+# {{ ansible_managed }}
+
+[Time]
+{% for key, value in item.content.items() %}
+{%   if key == 'NTP' or key == 'FallbackNTP' %}
+{%     if value is iterable %}
+{{ key }}={{ value | join(' ') }}
+{%     elif value | length > 1 %}
+{{ key }}={{ value }}
+{%     else %}
+{{ key }}=
+{%     endif %}
+{%   else %}
+{%     if value is string %}
+{{ key }}={{ value }}
+{%     else %}
+{{ key }}=
+{%     endif %}
+{%   endif %}
+{% endfor %}

@@ -1,0 +1,12 @@
+---
+
+- name: Manage systemd_timesyncd service
+  when: not ansible_check_mode
+  become: true
+  tags:
+    - systemd_timesyncd_service
+    - systemd_timesyncd
+  ansible.builtin.service:
+    name: "{{ systemd_timesyncd_service_name }}"
+    state: "{{ systemd_timesyncd_service_ensure }}"
+    enabled: "{{ systemd_timesyncd_service_enable }}"

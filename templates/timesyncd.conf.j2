@@ -1,0 +1,22 @@
+# {{ ansible_managed }}
+
+[Time]
+{% if systemd_timesyncd_config_options is defined and systemd_timesyncd_config_options %}
+{%   for key, value in systemd_timesyncd_config_options.items() %}
+{%     if key == 'NTP' or key == 'FallbackNTP' %}
+{%       if value is iterable %}
+{{ key }}={{ value | join(' ') }}
+{%       elif value | length > 1 %}
+{{ key }}={{ value }}
+{%       else %}
+{{ key }}={{ value }}
+{%       endif %}
+{%     else %}
+{%       if value is string %}
+{{ key }}={{ value }}
+{%       else %}
+{{ key }}=
+{%       endif %}
+{%     endif %}
+{%   endfor %}
+{% endif %}

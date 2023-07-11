@@ -1,0 +1,18 @@
+galaxy_info:
+  role_name: systemd_timesyncd
+  namespace: autechgemz
+  author: "autechgemz@gmail.com"
+  description: "Manage systemd-timesyncd - Network Time Synchronization service"
+  license: MIT
+  min_ansible_version: "1.2"
+  galaxy_tags: []
+  platforms:
+    - name: "Ubuntu"
+      release:
+        - focal
+        - jammy
+    - name: "EL"
+      release:
+        - 8
+        - 9
+dependencies: []

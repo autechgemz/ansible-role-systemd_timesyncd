@@ -1,0 +1,7 @@
+---
+
+systemd_timesyncd_service_name: 'systemd-timesyncd'
+
+systemd_timesyncd_config_file: '/etc/systemd/timesyncd.conf'
+
+systemd_timesyncd_dropin_config_dir: '/etc/systemd/timesyncd.conf.d'

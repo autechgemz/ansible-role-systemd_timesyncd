@@ -7,16 +7,6 @@
     - systemd_timesyncd
   block:
     - name: Install systemd_timesyncd package
-      when: ansible_os_family == 'Debian'
-      ansible.builtin.apt:
-        name: ["{{ item }}"]
-        update_cache: true
+      ansible.builtin.package:
+        name: "{{ systemd_timesyncd_package_name }}"
         state: "{{ systemd_timesyncd_package_ensure }}"
-      with_items: "{{ systemd_timesyncd_package_name }}"
-
-    - name: Install systemd_timesyncd package
-      when: ansible_os_family == 'RedHat'
-      ansible.builtin.yum:
-        name: ["{{ item }}"]
-        state: "{{ systemd_timesyncd_package_ensure }}"
-      with_items: "{{ systemd_timesyncd_package_name }}"

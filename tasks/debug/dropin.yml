@@ -1,9 +1,9 @@
 ---
 
-- name: Debug variable print 
+- name: Debug variable print
   when: systemd_timesyncd_debug is defined and systemd_timesyncd_debug
   block:
-    - name: Debug systemd_timesyncd_dropin_before 
+    - name: Debug systemd_timesyncd_dropin_before
       ansible.builtin.debug:
         var: systemd_timesyncd_dropin_before
     - name: Debug systemd_timesyncd_dropin_after

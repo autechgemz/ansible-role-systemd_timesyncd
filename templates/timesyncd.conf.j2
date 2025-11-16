@@ -9,13 +9,13 @@
 {%       elif not value %}
 {{ key }}=
 {%       else %}
-{{ key }}={{ value }}
+{{ key }}={{ value | string | lower in ['true', 'yes'] | ternary('yes', 'no') }}
 {%       endif %}
 {%     else %}
 {%       if not value %}
 {{ key }}=
 {%       else %}
-{{ key }}={{ value }}
+{{ key }}={{ value | string | lower in ['true', 'yes'] | ternary('yes', 'no') }}
 {%       endif %}
 {%     endif %}
 {%   endfor %}

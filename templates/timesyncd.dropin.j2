@@ -5,16 +5,16 @@
 {%   if key == 'NTP' or key == 'FallbackNTP' %}
 {%     if value is iterable %}
 {{ key }}={{ value | join(' ') }}
-{%     elif value | length > 1 %}
-{{ key }}={{ value }}
-{%     else %}
+{%     elif not value %}
 {{ key }}=
+{%     else %}
+{{ key }}={{ value | string | lower in ['true', 'yes'] | ternary('yes', 'no') }}
 {%     endif %}
 {%   else %}
-{%     if value is string %}
-{{ key }}={{ value }}
-{%     else %}
+{%     if not value %}
 {{ key }}=
+{%     else %}
+{{ key }}={{ (value | string | lower in ['true' ]) | ternary('yes', 'no') }}
 {%     endif %}
 {%   endif %}
 {% endfor %}

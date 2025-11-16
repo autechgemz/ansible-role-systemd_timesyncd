@@ -11,6 +11,7 @@ galaxy_info:
       release:
         - focal
         - jammy
+        - noble
     - name: "EL"
       release:
         - 8

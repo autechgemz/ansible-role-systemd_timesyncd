@@ -1,23 +1,20 @@
 ---
 
 - name: Config tasks
-  when: systemd_timesyncd_package_ensure == 'present'
   tags:
     - systemd_timesyncd_config
     - systemd_timesyncd
   become: true
   block:
     - name: Make dropin config directory
-      when: systemd_timesyncd_dropin_config_options is defined and systemd_timesyncd_dropin_config_options
       ansible.builtin.file:
         path: "{{ systemd_timesyncd_dropin_config_dir }}"
-        mode: "0755"
         owner: root
         group: root
+        mode: "0755"
         state: directory
 
     - name: Initialize dropin config
-      when: systemd_timesyncd_dropin_config_options is defined and systemd_timesyncd_dropin_config_options
       block:
 
         - name: Search dropin config
@@ -30,25 +27,29 @@
           ansible.builtin.set_fact:
             systemd_timesyncd_dropin_before: "{{ findlist['files'] | map(attribute='path') | flatten }}"
 
-        - name: Generate dropin config
+        - name: Generate dropin config names
           ansible.builtin.set_fact:
             systemd_timesyncd_dropin_temp: "{{ systemd_timesyncd_dropin_config_options | map(attribute='name') | flatten }}"
 
-        - name: Generate dropin config
+        - name: Initialize dropin_after list
           ansible.builtin.set_fact:
-            systemd_timesyncd_dropin_after: "{{ systemd_timesyncd_dropin_after | default([]) }} + [ {{ systemd_timesyncd_dropin_config_dir }}/{{ item }} ] | flatten }}"
+            systemd_timesyncd_dropin_after: []
+
+        - name: Generate dropin config paths
+          ansible.builtin.set_fact:
+            systemd_timesyncd_dropin_after: "{{ systemd_timesyncd_dropin_after + [systemd_timesyncd_dropin_config_dir + '/' + item] }}"
           with_items: "{{ systemd_timesyncd_dropin_temp }}"
 
         - name: Remove target dropin config
           ansible.builtin.set_fact:
             systemd_timesyncd_dropin_remove: "{{ systemd_timesyncd_dropin_before | difference(systemd_timesyncd_dropin_after) }}"
 
-        - name: Debug variable print 
+        - name: Debug variable print
           when: systemd_timesyncd_debug is defined and systemd_timesyncd_debug
-          ansible.builtin.import_tasks: debug/dropin.yml
+          ansible.builtin.include_tasks: debug/dropin.yml
 
         - name: Remove dropin config
-          when: systemd_timesyncd_dropin_remove is defined
+          when: systemd_timesyncd_dropin_remove | length > 0
           ansible.builtin.file:
             path: "{{ item }}"
             state: absent
@@ -56,12 +57,14 @@
           notify: Restart systemd-timesyncd
 
     - name: Manage dropin configuration
-      when: systemd_timesyncd_dropin_config_options is defined and systemd_timesyncd_dropin_config_options
+      when: systemd_timesyncd_dropin_config_options is defined and systemd_timesyncd_dropin_config_options | length > 0
       ansible.builtin.template:
         src: timesyncd.dropin.j2
         dest: "{{ systemd_timesyncd_dropin_config_dir }}/{{ item.name }}"
         mode: "0644"
         owner: root
         group: root
+        backup: yes
       notify: Restart systemd-timesyncd
       with_items: "{{ systemd_timesyncd_dropin_config_options }}"
+      register: dropin_result

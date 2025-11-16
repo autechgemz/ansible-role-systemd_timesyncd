@@ -6,21 +6,22 @@ Manage systemd-timesyncd - Network Time Synchronization service.
 
 ## Requirements
 
-None
+- Ansible >= 2.9
 
 ## Dependencies
 
-None
+- EPEL repository (RedHat family only)
 
 ## OS Platforms
 
-- AlmaLinux8 or higher
-- Rockylinux8 or higher
-- Ubuntu-20.04 or higher
+- AlmaLinux8+
+- Rockylinux8+
+- CentOS8+
+- Ubuntu-20.04+
 
 ## Example Playbook
 
-```
+```yaml
 - hosts: all
   roles:
     - systemd_timesyncd
@@ -30,37 +31,37 @@ None
 
 ### systemd_timesyncd_package_ensure: (string)
 
-```
+```yaml
 systemd_timesyncd_package_ensure: 'present'
 ```
 
 ### systemd_timesyncd_service_ensure: (string)
 
-```
+```yaml
 systemd_timesyncd_service_ensure: 'started'
 ```
 
 ### systemd_timesyncd_service_enable: (bool)
 
-```
+```yaml
 systemd_timesyncd_service_enable: true
 ```
 
 ### systemd_timesyncd_config_options: (dict)
 
-```
+```yaml
 systemd_timesyncd_config_options: {}
 ```
 
 ### systemd_timesyncd_dropin_config_options: (dict)
 
-```
+```yaml
 systemd_timesyncd_dropin_config_options: {}
 ```
 
 ## Example vars
 
-```
+```yaml
 systemd_timesyncd_config_options:
   NTP:
     - 'time1.google.com'
@@ -80,4 +81,3 @@ systemd_timesyncd_dropin_config_options:
         - 2.ubuntu.pool.ntp.org
         - 3.ubuntu.pool.ntp.org
 ```
-
